@@ -1,12 +1,25 @@
 import React, { Component } from 'react';
 import './App.css';
+import io from 'socket.io-client';
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+    }
+    componentDidMount() {
+        const socket = io('https://streamer.cryptocompare.com/');
+        const subscription = ['2~Poloniex~DOGE~USD', '2~Poloniex~ZEC~USD', '2~Poloniex~BTS~USD'];
+        socket.emit('SubAdd', {subs: subscription});
+        socket.on('m', message => {
+            console.log(message.split('~'));
+        });
+
+    }
     render() {
         return (
             <div id='container'>
                 <table>
-                    <caption>Crypto Currencies Live Table</caption>
+                    <caption>Live Crypto Currencies Quotes</caption>
                     <thead>
                         <tr>
                             <th scope="col">Number</th>
